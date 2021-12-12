@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -31,8 +30,8 @@ public class EmprendimientoController {
     }
 
     @GetMapping
-    public List<Emprendimiento> getEmprendimientos(){
-        return emprendimientoRepository.findAll();
+    public ResponseEntity<?> getEmprendimientos() {
+        return new ResponseEntity<>(emprendimientoRepository.findAll(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

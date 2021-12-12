@@ -91,4 +91,6 @@ public class Emprendimiento {
     public void setOwner(Usuario owner) {
         this.owner = owner;
     }
+
+
 }
