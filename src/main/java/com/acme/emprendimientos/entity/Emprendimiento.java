@@ -1,5 +1,7 @@
 package com.acme.emprendimientos.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +25,8 @@ public class Emprendimiento {
     @NotEmpty(message = "Contenido no puede ser vacío")
     private String contenido;
 
-    private LocalDate fechaCreacion;
+    @CreationTimestamp
+    private LocalDate fechaDeCreacion;
 
     private BigDecimal objetivo;
 
@@ -57,12 +60,12 @@ public class Emprendimiento {
         this.contenido = contenido;
     }
 
-    public LocalDate getFechaCreacion() {
-        return fechaCreacion;
+    public LocalDate getfechaDeCreacion() {
+        return fechaDeCreacion;
     }
 
-    public void setFechaCreacion(LocalDate fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
+    public void setfechaDeCreacion(LocalDate fechaCreacion) {
+        this.fechaDeCreacion = fechaCreacion;
     }
 
     public BigDecimal getObjetivo() {
