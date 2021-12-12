@@ -29,7 +29,7 @@ public class Emprendimiento {
 
     private boolean publicado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Usuario owner;
 
     public Long getId() {

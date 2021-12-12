@@ -25,6 +25,7 @@ public class UsuarioController {
         this.usuarioRepository = usuarioRepository;
     }
 
+    //GET ALL Usuarios
     @GetMapping
     public ResponseEntity<?> getUsuarios(){
         return new ResponseEntity(usuarioRepository.findAll(), HttpStatus.OK);
@@ -40,6 +41,7 @@ public class UsuarioController {
 //        return new ResponseEntity(usuarioRepository.findAll(), HttpStatus.OK);
 //    }
 
+    //DELETE Usiario by id
     @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteUsuario(@PathVariable(value = "id") Long Id)
             throws ResourceNotFoundException {
@@ -52,6 +54,7 @@ public class UsuarioController {
         return response;
     }
 
+    //CREATE Usuario
     @PostMapping
     public ResponseEntity<?> createUsuario(@Valid @RequestBody Usuario usuario) {
         return new ResponseEntity<>(usuarioRepository.save(usuario), HttpStatus.CREATED);

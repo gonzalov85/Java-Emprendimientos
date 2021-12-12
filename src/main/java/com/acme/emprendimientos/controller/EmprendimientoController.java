@@ -29,11 +29,13 @@ public class EmprendimientoController {
         this.usuarioRepository = usuarioRepository;
     }
 
+    //GET All Emprendimientos
     @GetMapping
     public ResponseEntity<?> getEmprendimientos() {
         return new ResponseEntity<>(emprendimientoRepository.findAll(), HttpStatus.OK);
     }
 
+    //Delete Emprendimiento by id
     @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteEmprendimiento(@PathVariable(value = "id") Long Id)
             throws ResourceNotFoundException {
@@ -46,6 +48,7 @@ public class EmprendimientoController {
         return response;
     }
 
+    //Crear Emprendimiento
     @PostMapping
     public ResponseEntity<?> createEmprendimiento(@Valid @RequestBody OperacionEmprendimiento operacionEmprendimiento) {
         Usuario usuario = usuarioRepository.findById(operacionEmprendimiento.getIdUsuario())
