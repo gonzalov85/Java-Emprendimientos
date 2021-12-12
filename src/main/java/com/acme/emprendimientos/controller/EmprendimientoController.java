@@ -1,16 +1,15 @@
 package com.acme.emprendimientos.controller;
 
 import com.acme.emprendimientos.entity.Emprendimiento;
+import com.acme.emprendimientos.entity.Usuario;
 import com.acme.emprendimientos.repository.EmprendimientoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/emprendimiento")
@@ -20,6 +19,11 @@ public class EmprendimientoController {
     @Autowired
     public EmprendimientoController(EmprendimientoRepository emprendimientoRepository){
         this.emprendimientoRepository = emprendimientoRepository;
+    }
+
+    @GetMapping
+    public List<Emprendimiento> getEmprendimientos(){
+        return emprendimientoRepository.findAll();
     }
 
     @PostMapping
