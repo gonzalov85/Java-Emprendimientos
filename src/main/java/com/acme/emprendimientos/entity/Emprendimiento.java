@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -13,10 +14,13 @@ public class Emprendimiento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Nombre no puede ser vacío")
     private String nombre;
 
+    @NotEmpty(message = "Descripción no puede ser vacío")
     private String descripcion;
 
+    @NotEmpty(message = "Contenido no puede ser vacío")
     private String contenido;
 
     private LocalDate fechaCreacion;

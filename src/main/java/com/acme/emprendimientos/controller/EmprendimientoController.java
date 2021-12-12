@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/emprendimiento")
 public class EmprendimientoController {
-    private EmprendimientoRepository emprendimientoRepository;
+    private final EmprendimientoRepository emprendimientoRepository;
 
     @Autowired
     public EmprendimientoController(EmprendimientoRepository emprendimientoRepository){
