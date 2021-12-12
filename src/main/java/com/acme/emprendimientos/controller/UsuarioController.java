@@ -24,22 +24,17 @@ public class UsuarioController {
     public UsuarioController(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
-
-    //GET ALL Usuarios
+    
+    //GET ALL Usuarios if fechaDesde not defined
     @GetMapping
-    public ResponseEntity<?> getUsuarios(){
+    public ResponseEntity<?> obtenerTodos(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde) {
+        if (fechaDesde != null) {
+            List<Usuario> usuarios = usuarioRepository.findByFechaDeCreacionAfter(fechaDesde.atStartOfDay());
+            return new ResponseEntity(usuarios, HttpStatus.OK);
+        }
         return new ResponseEntity(usuarioRepository.findAll(), HttpStatus.OK);
     }
-
-//    @GetMapping
-//    public ResponseEntity<?> obtenerTodos(
-//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde) {
-//        if (fechaDesde != null) {
-//            List<Usuario> usuarios = usuarioRepository.findByFechaDeCreacionAfter(fechaDesde.atStartOfDay());
-//            return new ResponseEntity(usuarios, HttpStatus.OK);
-//        }
-//        return new ResponseEntity(usuarioRepository.findAll(), HttpStatus.OK);
-//    }
 
     //DELETE Usiario by id
     @DeleteMapping("/{id}")
