@@ -9,6 +9,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Usuario {
@@ -34,6 +36,9 @@ public class Usuario {
 
     @CreationTimestamp
     private LocalDateTime fechaDeCreacion;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Emprendimiento> emprendimientos = new ArrayList<>();
 
     @NotEmpty(message = "La ciudad no puede ser vacio")
     private String ciudad;
@@ -72,7 +77,6 @@ public class Usuario {
         return username;
     }
 
-    @Column(unique=true)
     public void setUsername(String username) {
         this.username = username;
     }
@@ -123,5 +127,15 @@ public class Usuario {
 
     public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public void agregarEmprendimiento(Emprendimiento emprendimiento) {
+        emprendimientos.add(emprendimiento);
+        emprendimiento.setOwner(this);
+    }
+
+    public void removerEmprendimiento(Emprendimiento emprendimiento) {
+        emprendimientos.remove(emprendimiento);
+        emprendimiento.setOwner(null);
     }
 }

@@ -1,7 +1,6 @@
 package com.acme.emprendimientos.controller;
 
 import com.acme.emprendimientos.entity.Emprendimiento;
-import com.acme.emprendimientos.entity.Usuario;
 import com.acme.emprendimientos.repository.EmprendimientoRepository;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

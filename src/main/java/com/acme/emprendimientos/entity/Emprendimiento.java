@@ -2,10 +2,7 @@ package com.acme.emprendimientos.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,6 +28,9 @@ public class Emprendimiento {
     private BigDecimal objetivo;
 
     private boolean publicado;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Usuario owner;
 
     public Long getId() {
         return id;
@@ -84,4 +84,11 @@ public class Emprendimiento {
         this.publicado = publicado;
     }
 
+    public Usuario getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Usuario owner) {
+        this.owner = owner;
+    }
 }
