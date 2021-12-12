@@ -6,7 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 public class Emprendimiento {
@@ -25,10 +24,6 @@ public class Emprendimiento {
     private BigDecimal objetivo;
 
     private boolean publicado;
-
-    private List<String> capturas;
-
-    private List<String> tags;
 
     public Long getId() {
         return id;
@@ -82,19 +77,4 @@ public class Emprendimiento {
         this.publicado = publicado;
     }
 
-    public List<String> getCapturas() {
-        return capturas;
-    }
-
-    public void setCapturas(List<String> capturas) {
-        this.capturas = capturas;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
 }
