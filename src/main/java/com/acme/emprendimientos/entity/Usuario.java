@@ -64,6 +64,7 @@ public class Usuario {
         return username;
     }
 
+    @Column(unique=true)
     public void setUsername(String username) {
         this.username = username;
     }
