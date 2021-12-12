@@ -1,5 +1,6 @@
 package com.acme.emprendimientos.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class Usuario {
 
     @NotEmpty(message = "El password no puede ser vacio")
     @Size(min = 8, max = 20)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @CreationTimestamp
