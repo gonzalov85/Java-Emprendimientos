@@ -1,10 +1,13 @@
 package com.acme.emprendimientos.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
 public class Usuario {
@@ -19,12 +22,16 @@ public class Usuario {
     private String apellido;
 
     @NotEmpty(message = "El email no puede ser vacio")
+    @Column(unique = true)
     @Email(regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
     private String username;
 
     @NotEmpty(message = "El password no puede ser vacio")
     @Size(min = 8, max = 20)
     private String password;
+
+    @CreationTimestamp
+    private LocalDateTime fechaDeCreacion;
 
     @NotEmpty(message = "La ciudad no puede ser vacio")
     private String ciudad;
@@ -42,7 +49,6 @@ public class Usuario {
     public Long getId() {
         return id;
     }
-
 
     public String getNombre() {
         return nombre;
@@ -75,6 +81,14 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public LocalDateTime getFechaDeCreacion() {
+        return fechaDeCreacion;
+    }
+
+    public void setFechaDeCreacion(LocalDateTime fechaDeCreacion) {
+        this.fechaDeCreacion = fechaDeCreacion;
     }
 
     public String getCiudad() {
