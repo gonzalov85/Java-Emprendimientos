@@ -1,17 +1,15 @@
-package com.acme.emprendimientos.entity;
+package com.acme.emprendimientos.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity
-public class Emprendimiento {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class OperacionEmprendimiento {
 
     @NotEmpty(message = "Nombre no puede ser vacío")
     private String nombre;
@@ -29,12 +27,10 @@ public class Emprendimiento {
 
     private boolean publicado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Usuario owner;
-
-    public Long getId() {
-        return id;
-    }
+    @NotNull
+    @Positive
+    @JsonProperty(value = "id_usuario")
+    private Long idUsuario;
 
     public String getNombre() {
         return nombre;
@@ -64,8 +60,8 @@ public class Emprendimiento {
         return fechaDeCreacion;
     }
 
-    public void setFechaDeCreacion(LocalDate fechaCreacion) {
-        this.fechaDeCreacion = fechaCreacion;
+    public void setFechaDeCreacion(LocalDate fechaDeCreacion) {
+        this.fechaDeCreacion = fechaDeCreacion;
     }
 
     public BigDecimal getObjetivo() {
@@ -84,11 +80,11 @@ public class Emprendimiento {
         this.publicado = publicado;
     }
 
-    public Usuario getOwner() {
-        return owner;
+    public Long getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setOwner(Usuario owner) {
-        this.owner = owner;
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }
