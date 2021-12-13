@@ -2,31 +2,39 @@ package com.acme.emprendimientos.controller;
 
 import com.acme.emprendimientos.dto.OperacionEmprendimiento;
 import com.acme.emprendimientos.entity.Emprendimiento;
-import com.acme.emprendimientos.entity.Usuario;
+
 import com.acme.emprendimientos.repository.EmprendimientoRepository;
-import com.acme.emprendimientos.repository.UsuarioRepository;
+import com.acme.emprendimientos.service.EmprendimientoService;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
+
 import javax.validation.Valid;
 import java.util.HashMap;
+
 import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/emprendimiento")
 public class EmprendimientoController {
+
+    private final EmprendimientoService emprendimientoService;
     private final EmprendimientoRepository emprendimientoRepository;
-    private final UsuarioRepository usuarioRepository;
 
     @Autowired
-    public EmprendimientoController(EmprendimientoRepository emprendimientoRepository,
-                                    UsuarioRepository usuarioRepository){
+    public EmprendimientoController(EmprendimientoService emprendimientoService, EmprendimientoRepository emprendimientoRepository) {
+        this.emprendimientoService = emprendimientoService;
         this.emprendimientoRepository = emprendimientoRepository;
-        this.usuarioRepository = usuarioRepository;
+    }
+
+
+    @PostMapping
+    public ResponseEntity<?> createEmprendimiento(@Valid @RequestBody OperacionEmprendimiento operacionEmprendimiento) {
+
+        return new ResponseEntity<>(emprendimientoService.createEmprendimiento(operacionEmprendimiento), HttpStatus.CREATED);
     }
 
     //GET All Emprendimientos
@@ -46,22 +54,6 @@ public class EmprendimientoController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
-    }
-
-    //Crear Emprendimiento
-    @PostMapping
-    public ResponseEntity<?> createEmprendimiento(@Valid @RequestBody OperacionEmprendimiento operacionEmprendimiento) {
-        Usuario usuario = usuarioRepository.findById(operacionEmprendimiento.getIdUsuario())
-                .orElseThrow(() -> new EntityNotFoundException("Usuario No Encontrado"));
-        Emprendimiento emprendimiento = new Emprendimiento();
-        emprendimiento.setNombre(operacionEmprendimiento.getNombre());
-        emprendimiento.setDescripcion(operacionEmprendimiento.getDescripcion());
-        emprendimiento.setContenido(operacionEmprendimiento.getContenido());
-        emprendimiento.setFechaDeCreacion(operacionEmprendimiento.getFechaDeCreacion());
-        emprendimiento.setObjetivo(operacionEmprendimiento.getObjetivo());
-        emprendimiento.setPublicado(operacionEmprendimiento.isPublicado());
-        emprendimiento.setOwner(usuario);
-        return new ResponseEntity<>(emprendimientoRepository.save(emprendimiento), HttpStatus.CREATED);
     }
 
 }

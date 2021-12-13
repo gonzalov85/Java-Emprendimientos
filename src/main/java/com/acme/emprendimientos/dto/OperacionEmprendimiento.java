@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class OperacionEmprendimiento {
 
@@ -31,6 +32,8 @@ public class OperacionEmprendimiento {
     @Positive
     @JsonProperty(value = "id_usuario")
     private Long idUsuario;
+
+    private List<Long> tags;
 
     public String getNombre() {
         return nombre;
@@ -86,5 +89,13 @@ public class OperacionEmprendimiento {
 
     public void setIdUsuario(Long idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    public List<Long> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Long> tags) {
+        this.tags = tags;
     }
 }

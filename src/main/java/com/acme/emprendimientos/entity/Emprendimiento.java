@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Emprendimiento {
@@ -31,6 +33,13 @@ public class Emprendimiento {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Usuario owner;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "empredimiento_id",
+            joinColumns = @JoinColumn(name = "emprendimiento_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> tags = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -92,5 +101,18 @@ public class Emprendimiento {
         this.owner = owner;
     }
 
+    public void agregarTag(Tag tag) {
+        tags.add(tag);
+        tag.getEmprendimientos().add(this);
+    }
+
+    public void removerTag(Tag tag) {
+        tags.remove(tag);
+        tag.getEmprendimientos().remove(null);
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
 
 }

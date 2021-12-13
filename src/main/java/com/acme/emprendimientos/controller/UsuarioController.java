@@ -24,7 +24,7 @@ public class UsuarioController {
     public UsuarioController(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
-    
+
     //GET ALL Usuarios if fechaDesde not defined
     @GetMapping
     public ResponseEntity<?> obtenerTodos(
