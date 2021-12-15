@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     List<Usuario> findByFechaDeCreacionAfter(LocalDateTime fechaDesde);
+    List<Usuario> findByCiudad(String ciudad);
 }
 

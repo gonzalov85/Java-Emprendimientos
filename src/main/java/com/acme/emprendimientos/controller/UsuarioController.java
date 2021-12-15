@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/usuario")
@@ -28,10 +29,13 @@ public class UsuarioController {
     //GET ALL Usuarios if fechaDesde not defined
     @GetMapping
     public ResponseEntity<?> obtenerTodos(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde,
+            @RequestParam(name = "ciudad", required = false) String ciudad){
         if (fechaDesde != null) {
             List<Usuario> usuarios = usuarioRepository.findByFechaDeCreacionAfter(fechaDesde.atStartOfDay());
             return new ResponseEntity(usuarios, HttpStatus.OK);
+        } else if (ciudad != null){
+            return new ResponseEntity<>(usuarioRepository.findByCiudad(ciudad), HttpStatus.OK);
         }
         return new ResponseEntity(usuarioRepository.findAll(), HttpStatus.OK);
     }
