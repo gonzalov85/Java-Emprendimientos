@@ -35,6 +35,8 @@ public class OperacionEmprendimiento {
 
     private List<Long> tags;
 
+    private List<Long> capturas;
+
     public String getNombre() {
         return nombre;
     }
@@ -98,4 +100,5 @@ public class OperacionEmprendimiento {
     public void setTags(List<Long> tags) {
         this.tags = tags;
     }
+
 }

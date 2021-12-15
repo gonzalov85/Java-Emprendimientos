@@ -1,9 +1,11 @@
 package com.acme.emprendimientos.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -31,8 +33,14 @@ public class Emprendimiento {
 
     private boolean publicado;
 
+    @NotNull
+    private String url;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private Usuario owner;
+
+    private Long emprendimientoId;
+    private Long usuarioId;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -40,6 +48,15 @@ public class Emprendimiento {
             joinColumns = @JoinColumn(name = "emprendimiento_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags = new ArrayList<>();
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "emprendimientoId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Voto> votos = new ArrayList<Voto>();
+    private Integer contadorDeVotos = 0;
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<Evento> eventos;
+
 
     public Long getId() {
         return id;
@@ -114,5 +131,6 @@ public class Emprendimiento {
     public List<Tag> getTags() {
         return tags;
     }
+
 
 }

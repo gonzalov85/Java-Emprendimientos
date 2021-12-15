@@ -20,14 +20,17 @@ public class EmprendimientoService {
     private final EmprendimientoRepository emprendimientoRepository;
     private final UsuarioRepository usuarioRepository;
     private final TagRepository tagRepository;
+    private final CapturaRepository capturaRepository;
 
     @Autowired
     public EmprendimientoService(EmprendimientoRepository emprendimientoRepository,
                                  UsuarioRepository usuarioRepository,
-                                 TagRepository tagRepository) {
+                                 TagRepository tagRepository,
+                                 CapturaRepository capturaRepository) {
         this.emprendimientoRepository = emprendimientoRepository;
         this.usuarioRepository = usuarioRepository;
         this.tagRepository = tagRepository;
+        this.capturaRepository = capturaRepository;
     }
 
     public Emprendimiento createEmprendimiento(OperacionEmprendimiento operacionEmprendimiento) {
