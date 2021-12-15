@@ -11,44 +11,59 @@ import com.acme.emprendimientos.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @Service
 public class EmprendimientoService {
-
     private final EmprendimientoRepository emprendimientoRepository;
     private final UsuarioRepository usuarioRepository;
     private final TagRepository tagRepository;
-    private final CapturaRepository capturaRepository;
-
     @Autowired
     public EmprendimientoService(EmprendimientoRepository emprendimientoRepository,
                                  UsuarioRepository usuarioRepository,
-                                 TagRepository tagRepository,
-                                 CapturaRepository capturaRepository) {
+                                 TagRepository tagRepository) {
         this.emprendimientoRepository = emprendimientoRepository;
         this.usuarioRepository = usuarioRepository;
         this.tagRepository = tagRepository;
-        this.capturaRepository = capturaRepository;
     }
 
-    public Emprendimiento createEmprendimiento(OperacionEmprendimiento operacionEmprendimiento) {
-        Usuario usuario = usuarioRepository.findById(operacionEmprendimiento.getIdUsuario())
-                .orElseThrow(() -> new EntityNotFoundException("Usuario No Encontrado"));
-        List<Tag> tags = tagRepository.findAllById(operacionEmprendimiento.getTags());
-        Emprendimiento emprendimiento = new Emprendimiento();
-        emprendimiento.setNombre(operacionEmprendimiento.getNombre());
-        emprendimiento.setDescripcion(operacionEmprendimiento.getDescripcion());
-        emprendimiento.setOwner(usuario);
-        emprendimiento.setContenido(operacionEmprendimiento.getDescripcion());
-        emprendimiento.setFechaDeCreacion(operacionEmprendimiento.getFechaDeCreacion());
-        emprendimiento.setObjetivo(operacionEmprendimiento.getObjetivo());
-        emprendimiento.setPublicado(operacionEmprendimiento.isPublicado());
-        emprendimiento.getTags().addAll(tags);
-
+    public Emprendimiento guardar(Long usuarioId, Emprendimiento emprendimiento) {
+        Usuario usuario = usuarioRepository.getById(usuarioId);
+        emprendimiento.setCreador(usuario);
         return emprendimientoRepository.save(emprendimiento);
     }
-
+    public Emprendimiento eliminar(Long id, Emprendimiento emprendimiento) {
+        Emprendimiento emprendimientoEliminado = emprendimientoRepository.getById(id);
+        emprendimientoEliminado.setActivo(false);
+        return emprendimientoRepository.save(emprendimientoEliminado);
+    }
+    public Emprendimiento modificar(Long id, Emprendimiento emprendimiento) {
+        Emprendimiento emprendimientoModificado = emprendimientoRepository.getById(id);
+        if (!emprendimiento.getNombre().trim().isEmpty()) {
+            emprendimientoModificado.setNombre(emprendimiento.getNombre()); }
+        if (!emprendimiento.getDescripcion().trim().isEmpty()) {
+            emprendimientoModificado.setDescripcion(emprendimiento.getDescripcion()); }
+        if (!emprendimiento.getContenido().trim().isEmpty()) {
+            emprendimientoModificado.setContenido(emprendimiento.getContenido()); }
+        if (emprendimiento.getObjetivo() != null && emprendimiento.getObjetivo() > 0) {
+            emprendimientoModificado.setObjetivo(emprendimiento.getObjetivo()); }
+        if (emprendimiento.isPublicado() != true) { emprendimientoModificado.setPublicado(false); }
+        if (emprendimiento.isPublicado() != false) { emprendimientoModificado.setPublicado(true); }
+        if (emprendimiento.getUrl() != null) { emprendimientoModificado.setUrl(emprendimiento.getUrl()); }
+        if (emprendimiento.getTags() != null) { emprendimientoModificado.setTags(emprendimiento.getTags()); }
+        emprendimientoModificado.setUltimaModificacion(LocalDateTime.now());
+        return emprendimientoRepository.save(emprendimientoModificado);
+    }
+    public List<Emprendimiento> obtenerTodos(String nombre) {
+        if (nombre != null) { Tag tag = tagRepository.findByNombre(nombre);
+            return tag.getEmprendimientos();
+        } else { return emprendimientoRepository.findAll(); }
+    }
+    public Stream<Emprendimiento> obtenerNoPublicados() {
+        return emprendimientoRepository.findAll().stream()
+                .filter(Predicate.not(Emprendimiento::isPublicado));
+    }
 }
-

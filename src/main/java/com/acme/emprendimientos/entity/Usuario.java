@@ -1,7 +1,10 @@
 package com.acme.emprendimientos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -13,129 +16,132 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Where(clause = "activo = true")
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"hibernateLazyInitializer"})
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotEmpty(message = "El nombre no puede ser vacio")
+    @NotEmpty(message = "nombre no deberia estar vacio")
     private String nombre;
-
-    @NotEmpty(message = "El apellido no puede ser vacio")
+    @NotEmpty(message = "apellido no deberia estar vacio")
     private String apellido;
-
-    @NotEmpty(message = "El email no puede ser vacio")
+    @NotEmpty(message = "el email debe ser valido")
     @Column(unique = true)
     @Email(regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
-    private String username;
-
-    @NotEmpty(message = "El password no puede ser vacio")
-    @Size(min = 8, max = 20)
+    private String email;
+    @NotEmpty(message = "password no deberia estar vacio")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
+    private Boolean activo = true;
     @CreationTimestamp
     private LocalDateTime fechaDeCreacion;
-
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Emprendimiento> emprendimientos = new ArrayList<>();
-
-    @NotEmpty(message = "La ciudad no puede ser vacio")
+    private LocalDateTime ultimaModificacion;
+    @NotEmpty(message = "ciudad no deberia estar vacio")
     private String ciudad;
-
-    @NotEmpty(message = "La provincia no puede ser vacio")
+    @NotEmpty(message = "provincia no deberia estar vacio")
     private String provincia;
-
-    @NotEmpty(message = "El país no puede ser vacio")
+    @NotEmpty(message = "pais no deberia estar vacio")
     private String pais;
-
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private TipoUsuario tipoUsuario;
+    @Enumerated(value = EnumType.STRING)
+    private TipoUsuario tipo;
+    @OneToMany(mappedBy = "creador", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Emprendimiento> emprendimientos = new ArrayList<Emprendimiento>();
 
     public Long getId() {
         return id;
     }
-
+    public void setId(Long id) {
+        this.id = id;
+    }
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
     public String getApellido() {
         return apellido;
     }
-
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
-
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
-
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
-
+    public Boolean isActivo() {
+        return activo;
+    }
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
     public LocalDateTime getFechaDeCreacion() {
         return fechaDeCreacion;
     }
-
     public void setFechaDeCreacion(LocalDateTime fechaDeCreacion) {
         this.fechaDeCreacion = fechaDeCreacion;
     }
-
+    public LocalDateTime getUltimaModificacion() {
+        return ultimaModificacion;
+    }
+    public void setUltimaModificacion(LocalDateTime ultimaModificacion) {
+        this.ultimaModificacion = ultimaModificacion;
+    }
     public String getCiudad() {
         return ciudad;
     }
-
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
     }
-
     public String getProvincia() {
         return provincia;
     }
-
     public void setProvincia(String provincia) {
         this.provincia = provincia;
     }
-
     public String getPais() {
         return pais;
     }
-
     public void setPais(String pais) {
         this.pais = pais;
     }
-
-    public TipoUsuario getTipoUsuario() {
-        return tipoUsuario;
+    public TipoUsuario getTipo() {
+        return tipo;
     }
-
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
+    public void setTipo(TipoUsuario tipo) {
+        this.tipo = tipo;
     }
-
-    public void agregarEmprendimiento(Emprendimiento emprendimiento) {
+    /*     @JsonIgnore */
+    public List<Emprendimiento> getEmprendimientos() {
+        return emprendimientos;
+    }
+    public void setEmprendimientos(List<Emprendimiento> emprendimientos) {
+        this.emprendimientos = emprendimientos;
+    }
+    public void addEmprendimiento(Emprendimiento emprendimiento) {
         emprendimientos.add(emprendimiento);
-        emprendimiento.setOwner(this);
+        emprendimiento.setCreador(this);
     }
-
-    public void removerEmprendimiento(Emprendimiento emprendimiento) {
+    public void removeEmprendimiento(Emprendimiento emprendimiento) {
         emprendimientos.remove(emprendimiento);
-        emprendimiento.setOwner(null);
+        emprendimiento.setCreador(null);
+    }
+    @Override
+    public String toString() {
+        return "Usuario [activo=" + activo + ", apellido=" + apellido + ", ciudad=" + ciudad + ", email=" + email
+                + ", fechaDeCreacion=" + fechaDeCreacion + ", id=" + id + ", nombre=" + nombre + ", pais=" + pais
+                + ", password=" + password + ", provincia=" + provincia + ", tipo=" + tipo + ", ultimaModificacion="
+                + ultimaModificacion + "]";
     }
 }
