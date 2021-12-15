@@ -57,6 +57,23 @@ public class Emprendimiento {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Evento> eventos;
 
+    public void addEvento(Evento evento) {
+        if (this.eventos == null) {
+            this.eventos = new ArrayList<>();
+        }
+        this.eventos.add(evento);
+    }
+
+    public Integer getContadorDeVotos() {
+        return contadorDeVotos;
+    }
+
+    public void setContadorDeVotos(Integer contadorDeVotos) {
+        this.contadorDeVotos = contadorDeVotos;
+    }
+
+
+
 
     public Long getId() {
         return id;
