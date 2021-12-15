@@ -1,5 +1,7 @@
 package com.acme.emprendimientos.controller;
 
+import com.acme.emprendimientos.dto.VotoDTO;
+import com.acme.emprendimientos.service.VotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,4 +26,4 @@ public class VotoController {
     public ResponseEntity<?> obtenerLosVotosDeUnUsuario(@PathVariable("usuarioId") Long usuarioId) {
         return new ResponseEntity<>(votoService.obtenerVotos(usuarioId), HttpStatus.OK);
     }
-} 
+}
