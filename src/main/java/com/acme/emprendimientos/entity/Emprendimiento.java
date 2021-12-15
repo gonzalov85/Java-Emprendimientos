@@ -20,11 +20,11 @@ public class Emprendimiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty(message = "nombre no deberia estar vacio")
+    @NotEmpty(message = "Nombre no puede estar vacío")
     private String nombre;
-    @NotEmpty(message = "descripcion no deberia estar vacio")
+    @NotEmpty(message = "Descripcion no puede estar vacío")
     private String descripcion;
-    @NotEmpty(message = "contenido no deberia estar vacio")
+    @NotEmpty(message = "Contenido no puede estar vacío")
     private String contenido;
     @CreationTimestamp
     private LocalDateTime fechaDeCreacion;

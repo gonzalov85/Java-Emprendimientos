@@ -22,26 +22,26 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty(message = "nombre no deberia estar vacio")
+    @NotEmpty(message = "Nombre no puedeestar vacío")
     private String nombre;
-    @NotEmpty(message = "apellido no deberia estar vacio")
+    @NotEmpty(message = "Apellido no puede estar vacío")
     private String apellido;
-    @NotEmpty(message = "el email debe ser valido")
+    @NotEmpty(message = "Email no puede estar vacío")
     @Column(unique = true)
     @Email(regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
     private String email;
-    @NotEmpty(message = "password no deberia estar vacio")
+    @NotEmpty(message = "Password no puede estar vacío")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private Boolean activo = true;
     @CreationTimestamp
     private LocalDateTime fechaDeCreacion;
     private LocalDateTime ultimaModificacion;
-    @NotEmpty(message = "ciudad no deberia estar vacio")
+    @NotEmpty(message = "Ciudad no puede estar vacío")
     private String ciudad;
-    @NotEmpty(message = "provincia no deberia estar vacio")
+    @NotEmpty(message = "Provincia no puede estar vacío")
     private String provincia;
-    @NotEmpty(message = "pais no deberia estar vacio")
+    @NotEmpty(message = "Pais no puede estar vacío")
     private String pais;
     @NotNull
     @Enumerated(value = EnumType.STRING)
