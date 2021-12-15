@@ -1,7 +1,6 @@
 package com.acme.emprendimientos.service;
 
 
-import com.acme.emprendimientos.dto.OperacionEmprendimiento;
 import com.acme.emprendimientos.entity.Emprendimiento;
 import com.acme.emprendimientos.entity.Tag;
 import com.acme.emprendimientos.entity.Usuario;

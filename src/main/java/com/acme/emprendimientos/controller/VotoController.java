@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "votos")
+@RequestMapping(value = "/voto")
 public class VotoController {
     private final VotoService votoService;
     @Autowired

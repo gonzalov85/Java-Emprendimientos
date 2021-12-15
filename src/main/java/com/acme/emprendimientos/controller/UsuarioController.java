@@ -1,8 +1,7 @@
 package com.acme.emprendimientos.controller;
 
 import com.acme.emprendimientos.entity.Usuario;
-import com.acme.emprendimientos.repository.UsuarioRepository;
-import org.apache.velocity.exception.ResourceNotFoundException;
+import com.acme.emprendimientos.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -10,52 +9,34 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
 
 
 @RestController
-@RequestMapping(value = "/usuario")
+@RequestMapping(value = "/usuarios")
 public class UsuarioController {
-    private final UsuarioRepository usuarioRepository;
-
+    private final UsuarioService usuarioService;
     @Autowired
-    public UsuarioController(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
-    //GET ALL Usuarios if fechaDesde not defined
-    @GetMapping
-    public ResponseEntity<?> obtenerTodos(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde,
-            @RequestParam(name = "ciudad", required = false) String ciudad){
-        if (fechaDesde != null) {
-            List<Usuario> usuarios = usuarioRepository.findByFechaDeCreacionAfter(fechaDesde.atStartOfDay());
-            return new ResponseEntity(usuarios, HttpStatus.OK);
-        } else if (ciudad != null){
-            return new ResponseEntity<>(usuarioRepository.findByCiudad(ciudad), HttpStatus.OK);
-        }
-        return new ResponseEntity(usuarioRepository.findAll(), HttpStatus.OK);
-    }
-
-    //DELETE Usiario by id
-    @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteUsuario(@PathVariable(value = "id") Long Id)
-            throws ResourceNotFoundException {
-        Usuario usuario = usuarioRepository.findById(Id)
-                .orElseThrow(() -> new ResourceNotFoundException("No existe un usuario con el id: " + Id));
-
-        usuarioRepository.delete(usuario);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
-
-    //CREATE Usuario
     @PostMapping
-    public ResponseEntity<?> createUsuario(@Valid @RequestBody Usuario usuario) {
-        return new ResponseEntity<>(usuarioRepository.save(usuario), HttpStatus.CREATED);
+    public ResponseEntity<?>crearUsuario(@Valid @RequestBody Usuario usuario) {
+        return new ResponseEntity<>(usuarioService.guardar(usuario), HttpStatus.CREATED);
+    }
+    @PutMapping(value = "/{id}/quitar")
+    public Usuario eliminarUsuario(@PathVariable("id") Long id, Usuario usuario) {
+        return this.usuarioService.eliminar(id, usuario);
+    }
+    @PutMapping(value = "/{id}")
+    public Usuario modificarUsuario(@PathVariable("id") Long id, @Valid @RequestBody Usuario usuario) {
+        return this.usuarioService.modificar(id, usuario);
+    }
+    @GetMapping
+    public ResponseEntity<?> obtenerTodosLosUsuarios(@RequestParam(name = "fecha", required = false)
+                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaDeCreacion,
+                                                     @RequestParam(name = "ciudad", required = false) String ciudad) {
+        return new ResponseEntity<>(usuarioService.obtenerTodos(fechaDeCreacion, ciudad), HttpStatus.OK);
     }
 }
